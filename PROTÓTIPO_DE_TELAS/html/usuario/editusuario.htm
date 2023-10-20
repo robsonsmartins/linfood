@@ -1,0 +1,160 @@
+<script language="JavaScript">
+function enviar()
+{
+  senha = document.formusuario.senha.value;
+  nome = document.formusuario.nome.value;
+  tipoacesso = document.formusuario.tipodeacesso.value;
+  if (senha == "")
+  {
+    window.alert("O campo Senha não pode estar em branco!");
+    document.formusuario.senha.focus();
+    return;
+  }
+  else if (nome == "" )
+  {
+    window.alert("O campo Nome não pode estar em branco!");
+    document.formusuario.nome.focus();
+    return;
+  }
+  else if (tipoacesso == "0")
+  {
+    window.alert("Deve-se escolher o Tipo de Acesso!");
+    document.formusuario.tipodeacesso.focus();
+    return;
+  }
+  else
+  {
+    document.location.href("usuario.htm");
+  }
+}
+
+</script>
+
+<head>
+<title>Sistema LinFOOD - Cadastro de Usuários</title>
+<style type="text/css"><!--
+table {font-size: 10.7px; color: black; font-family: Arial, Helvetica, sans-serif; text-decoration: none; }
+soldig {font-size: 10.7px; color: black; font-family: Arial, Helvetica, sans-serif; text-decoration: none; }
+body { color: black; font-size=12px; font-family: Arial; } 
+  a:link { color: blue; } 
+  a:hover {  color: blue;} 
+  a:visited { color: blue;}
+-->
+</style>
+<style type="text/css"><!--
+table {font-size: 10.7px; color: black; font-family: Arial, Helvetica, sans-serif; text-decoration: none; }
+soldig {font-size: 10.7px; color: black; font-family: Arial, Helvetica, sans-serif; text-decoration: none; }
+-->
+</style>
+</head>
+
+<body topmargin="0" background="../imagens/backgrnd.gif">
+
+<font face="Arial" size="2">
+<div align="center">
+  <center>
+  <table border="0" cellspacing="0" width="100%" cellpadding="0">
+    <tr>
+      <td width="16%" bgcolor="#008000"><img border="0" src="../imagens/logo.gif" width="57" height="51"></td>
+    </font>
+      <td width="37%" bgcolor="#008000"><b><font face="Arial" size="5" color="#FFFFFF">Sistema LinFOOD</font></b></td>
+      <td width="47%" bgcolor="#008000">
+        <p align="center"><b><font face="Arial" size="3" color="#C0C0C0">Usuários</font></b></p>
+    </td>
+    </tr>
+    <tr>
+      <td width="100%" colspan="3">
+        <div align="center">
+          <table border="0" cellpadding="2" cellspacing="0" width="100%" bgcolor="#DADADA">
+            <tr>
+              <td width="2%">
+                <p align="center"><a href="../admlogin.htm"><img border="0" src="../imagens/logoff.gif" alt="Efetuar Logoff" width="25" height="25"></a></p>
+              </td>
+  </center>
+              <td width="1%"><a href="../admmenu.htm"><img border="0" src="../imagens/voltar.gif" alt="Voltar ao Menu Principal" width="25" height="25"></a></td>
+              <td width="96%">
+                <p align="right">&nbsp;<font color="#000000"><b>Usuário: </b> </font>Nome do Usuário</p>
+            </td>
+            </tr>
+          </table>
+        </div>
+
+</td>
+    </tr>
+  </table>
+  </div>
+  <p>
+
+<p>&nbsp;</p>
+
+<form method="GET" action="operacaousuario.asp" name="formusuario">
+<div align="center">
+  <center>
+  <table border="0" cellpadding="4" cellspacing="0" width="350">
+    <tr>
+      <td width="337" colspan="2" bgcolor="#000080">
+        <p align="center"><font color="#FFFFFF" size="2" face="Arial"><b>Usuário</b></font></p>
+      </td>
+    </tr>
+    <tr>
+      <td width="112" bgcolor="#C0C0C0"><b><font size="2" face="Arial">Nome</font></b></td>
+      <td width="225" bgcolor="#C0C0C0">
+        <input type="text" name="nome" size="26" value="Nome do Usuário">
+        <input type="hidden" name="id" size="20" value="1">
+      </td>
+    </tr>
+    <tr>
+      <td width="112" bgcolor="#C0C0C0"><b><font size="2" face="Arial">Senha</font></b></td>
+      <td width="225" bgcolor="#C0C0C0">
+        <input type="password" name="senha" size="26" value="senha">
+      </td>
+    </tr>
+    <tr>
+      <td width="112" bgcolor="#C0C0C0"><b><font size="2" face="Arial">Tipo de Acesso</font></b></td>
+      <td width="225" bgcolor="#C0C0C0">
+        <select size="1" name="tipodeacesso">
+          <option value="0" selected>Escolha o tipo de acesso</option>
+          <option value="GERENTE">GERENTE</option>
+          <option value="GARCOM">GARÇOM</option>
+          <option value="OPERADOR">OPERADOR DE CAIXA</option>
+        </select>
+      </td>
+    </tr>
+  </center>
+    <tr>
+      <td width="337" colspan="2" bgcolor="#C0C0C0">
+        <p align="center"><input type="button" value="  Salvar  " name="btnSalvar" onclick="javascript:enviar()">&nbsp;
+        <input type="button" value="Cancelar" name="btnCancelar" onClick="javascript:document.location.href('usuario.htm')"></p>
+      </td>
+    </tr>
+  </table>
+</div>
+&nbsp;
+</form>
+<script language="JavaScript">document.formusuario.nome.focus();</script>
+<p>&nbsp;</p>
+
+<p>&nbsp;</p>
+
+
+
+
+<div align="center">
+  <center>
+  <table border="0" cellpadding="0" cellspacing="0" width="100%">
+    <tr>
+      <td width="100%">
+<b>
+Grupo Ômega</b></td>
+    </tr>
+    <tr>
+      <td width="100%">
+Faculdades Batista de Administração e Informática</td>
+    </tr>
+    <tr>
+      <td width="100%">
+Sistemas de Informação - 8° Semestre - 2003</td>
+    </tr>
+  </table>
+  </center>
+</div>

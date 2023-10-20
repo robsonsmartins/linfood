@@ -1,0 +1,255 @@
+<script language="JavaScript">
+function AddObsDigi()
+{
+  if (document.formitem.obsdigi.value != "")
+  {
+    document.formitem.observacao.value = document.formitem.observacao.value + document.formitem.obsdigi.value + "\n";
+    document.formitem.obsdigi.value = "";
+  }
+}
+
+function AddObsCad()
+{
+  if (document.formitem.obscad.value != "")
+  {
+    document.formitem.observacao.value = document.formitem.observacao.value + document.formitem.obscad.value + "\n";
+    document.formitem.obscad.value = "";
+  }
+}
+
+function validaNumero(inteiro,texto) 
+//inteiro = true -> número inteiro, false -> real
+//texto = texto a ser validado
+{
+  strNumero = true;
+  for (i = 0; i < texto.length; i++)
+  {
+    s = texto.substr(i,1); 
+    naonumero = ((s != "0") && (s != "1") && (s != "2") && (s != "3") && 
+                 (s != "4") && (s != "5") && (s != "6") && (s != "7") && 
+                 (s != "8") && (s != "9"));
+    naovirgula = (s != ",");
+    if (naonumero && inteiro || naonumero && !inteiro && naovirgula)
+    {
+      strNumero = false;
+      break;   
+    }
+  }
+  return(strNumero);
+}
+
+function enviar()
+{
+  produto = document.formitem.produto.value;
+  quantidade = document.formitem.quantidade.value;
+
+  comanda = document.formitem.comanda.value;
+  
+  if (quantidade == "" || !validaNumero(false,quantidade))
+  {
+    window.alert("O campo Quantidade deve ser preenchido com um número real!");
+    document.formitem.quantidade.focus();
+    return;
+  }
+  else if (produto == 0)
+  {
+    window.alert("Deve-se escolher um Produto!");
+    document.formitem.produto.focus();
+    return;
+  }
+  
+  else if (comanda == "" || !validaNumero(true,comanda))
+  {
+    window.alert("O campo Número da Comanda deve ser preenchido com um número inteiro!");
+    document.formitem.comanda.focus();
+    return;
+  }
+  else
+  {
+  }
+}
+
+function finalizar()
+{
+  document.formitem.produto.value = 0
+  document.formitem.quantidade.value = 0
+  document.location.href("imprimeitem.htm");
+}
+
+</script>
+
+
+<head>
+<title>Sistema LinFOOD - Inserir Itens de Pedido</title>
+<style type="text/css"><!--
+table {font-size: 10.7px; color: black; font-family: Arial, Helvetica, sans-serif; text-decoration: none; }
+soldig {font-size: 10.7px; color: black; font-family: Arial, Helvetica, sans-serif; text-decoration: none; }
+body { color: black; font-size=12px; font-family: Arial; } 
+  a:link { color: blue; } 
+  a:hover {  color: blue;} 
+  a:visited { color: blue;}
+-->
+</style>
+<style type="text/css"><!--
+table {font-size: 10.7px; color: black; font-family: Arial, Helvetica, sans-serif; text-decoration: none; }
+soldig {font-size: 10.7px; color: black; font-family: Arial, Helvetica, sans-serif; text-decoration: none; }
+-->
+</style>
+</head>
+
+<body topmargin="0" background="../imagens/backgrnd.gif">
+
+<font face="Arial" size="2">
+<div align="center">
+  <center>
+  <table border="0" cellspacing="0" width="100%" cellpadding="0">
+    <tr>
+      <td width="16%" bgcolor="#008000"><img border="0" src="../imagens/logo.gif" width="57" height="51"></td>
+    </font>
+      <td width="37%" bgcolor="#008000"><b><font face="Arial" size="5" color="#FFFFFF">Sistema LinFOOD</font></b></td>
+      <td width="47%" bgcolor="#008000">
+        <p align="center"><b><font face="Arial" size="3" color="#C0C0C0">Itens de Pedido - Mesa X</font></b></p>
+    </td>
+    </tr>
+    <tr>
+      <td width="100%" colspan="3">
+        <div align="center">
+          <table border="0" cellpadding="2" cellspacing="0" width="100%" bgcolor="#DADADA">
+            <tr>
+              <td width="2%">
+                <p align="center"><a href="../login.htm"><img border="0" src="../imagens/logoff.gif" alt="Efetuar Logoff" width="25" height="25"></a></p>
+              </td>
+  </center>
+              <td width="96%">
+                <p align="right">&nbsp;<font color="#000000"><b>Usuário: </b> </font>Nome do Usuário</p>
+            </td>
+            </tr>
+          </table>
+        </div>
+
+</td>
+    </tr>
+  </table>
+  </div>
+  <p>
+
+<form method="GET" action="operacaoitem.asp" name="formitem">
+<div align="center">
+  <center>
+  <div align="center">
+    <center>
+  <table border="0" cellpadding="2" cellspacing="0" width="600">
+    <tr>
+      <td height="18" colspan="4" bgcolor="#000080">
+        <p align="center"><font face="Arial" size="2" color="#FFFFFF"><b>Item de
+        Pedido - Mesa X</b></font>
+      </td>
+    </tr>
+    <tr>
+      <td width="50" height="112" bgcolor="#CCCCCC" rowspan="4"><b><font face="Arial" size="1">Itens:<br>
+        </font></b><font face="Arial" size="1">
+          <textarea rows="11" name="itens" cols="21" disabled="true">1 Produto</textarea>
+        </font>
+
+      </td>
+      <td width="50" height="25" bgcolor="#CCCCCC">
+        <font face="Arial" size="1"><b> Comanda<br>
+        </b><input type="text" name="comanda" size="26">
+        </font>
+      </td>
+      <td width="230" height="25" bgcolor="#CCCCCC">&nbsp;
+      </td>
+      <td width="60" height="25" bgcolor="#CCCCCC">&nbsp;
+      </td>
+    </tr>
+  </center>
+  <center>
+  <tr>
+      <td width="50" height="25" bgcolor="#CCCCCC">
+        <b><font face="Arial" size="1">Produto</font></b><font face="Arial" size="1"><br>
+        <select size="1" name="produto">
+          <option "selected" value="0">Escolha um Produto</option>
+          <option value="1">Produto</option>
+        </select>
+        </font>
+      </td>
+      <td width="230" height="25" bgcolor="#CCCCCC">
+        <font face="Arial" size="1">
+        <b>Quantidade<br>
+        </b><input type="text" name="quantidade" size="9" value="1">
+        </font>
+      </td>
+      <td width="60" height="25" bgcolor="#CCCCCC">
+        &nbsp;
+      </td>
+    </tr>
+  </center>
+  <center>
+    <tr>
+    </center>
+      <td width="50" height="62" bgcolor="#CCCCCC" rowspan="2">
+        <p align="left"><b><font face="Arial" size="1">Observação</font></b><font face="Arial" size="1"><br>
+        <textarea rows="6" name="observacao" cols="21"></textarea></font></p>
+      </td>
+      <td width="230" height="69" bgcolor="#CCCCCC">
+        <font face="Arial" size="1">
+        <b>Adicionar Observação Cadastrada<br>
+        </b><select size="1" name="obscad">
+          <option "selected" value="">Escolha uma Observação</option>
+          <option value="Observação">Observação</option>
+        </select>
+        </font>
+      </td>
+      <td width="60" height="69" bgcolor="#CCCCCC">
+        <font face="Arial" size="1"><br>
+        <input type="button" value="Adiciona" name="btnAddObsCad" onClick="AddObsCad();">
+        </font>
+      </td>
+    </tr>
+    <tr>
+      <td width="230" height="1" bgcolor="#CCCCCC">
+        <font face="Arial" size="1"><b>Adicionar Observação Digitada</b><input type="text" name="obsdigi" size="26"></font>
+      </td>
+      <td width="60" height="1" bgcolor="#CCCCCC">
+        <font face="Arial" size="1"><br>
+        <input type="button" value="Adiciona" name="btnAddObsDigi" onClick="AddObsDigi();">
+        </font>
+      </td>
+    </tr>
+  <tr>
+      <td colspan="4" height="25" bgcolor="#CCCCCC">
+        <p align="center"><font face="Arial" size="1">
+        <input type="button" value="  Inserir  " name="btnSalvar" onclick="javascript:enviar()">
+        <input type="button" value="Finalizar" name="btnFinalizar" onclick="javascript:finalizar()">
+        </font>
+    </td>
+  </tr>
+  </table>
+  </div>
+</form>
+<script language="JavaScript">document.formitem.produto.focus();</script>
+  </center>
+
+<p>
+
+</div>
+
+<div align="center">
+  <center>
+  <table border="0" cellpadding="0" cellspacing="0" width="100%">
+    <tr>
+      <td width="100%">
+<b>
+Grupo Ômega</b></td>
+    </tr>
+    <tr>
+      <td width="100%">
+Faculdades Batista de Administração e Informática</td>
+    </tr>
+    <tr>
+      <td width="100%">
+Sistemas de Informação - 8° Semestre - 2003</td>
+    </tr>
+  </table>
+  </center>
+</div>

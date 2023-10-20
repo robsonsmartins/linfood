@@ -1,0 +1,3 @@
+*.pas linguist-detectable=false
+*.dfm linguist-detectable=false
+*.dpr linguist-detectable=false

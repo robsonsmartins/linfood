@@ -1,0 +1,1972 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Export generator="Cache" version="9" zv="Cache for Windows NT (Intel) 5.0.2 (Build 607_SU)" ts="2003-10-30 16:17:32">
+<Class name="LinFOOD.Classe">
+<Description>
+Esta classe armazena o cadastro de Classes de Produtos</Description>
+<ClassType>persistent</ClassType>
+<ProcedureBlock>1</ProcedureBlock>
+<Super>%Persistent</Super>
+<TimeChanged>59414,40086</TimeChanged>
+<TimeCreated>59413,85251.656</TimeCreated>
+
+<Property name="Descricao">
+<Description>
+Define a Descrição da Classe de Produto, e deve ser única</Description>
+<Type>%String</Type>
+<Required>1</Required>
+</Property>
+
+<Index name="DescricaoIndex">
+<Description>
+Este índice agiliza buscas no Banco de Dados</Description>
+<Properties>Descricao</Properties>
+<Unique>1</Unique>
+</Index>
+
+<Property name="Id">
+<Description>
+Retorna o Id do objeto instanciado</Description>
+<Type>%Integer</Type>
+<Calculated>1</Calculated>
+<Transient>1</Transient>
+<ReadOnly>1</ReadOnly>
+</Property>
+
+<Method name="IdGet">
+<Description>
+Implementação da propriedade Id</Description>
+<Language>basic</Language>
+<ReturnType>%Integer</ReturnType>
+<Implementation><![CDATA[
+ return Me.%Id()
+
+]]></Implementation>
+</Method>
+
+<Method name="Listar">
+<Description><![CDATA[
+Retorna os objetos armazenados através de uma lista.<br>
+O parâmetro define a Query a ser executada (default = "" = todos objetos).<p>
+Para obter os objetos use os métodos GetAt(i) e Count() da Lista de objetos.]]></Description>
+<FormalSpec>ASQL:%String=""</FormalSpec>
+<Language>basic</Language>
+<ReturnType>%ListOfObjects</ReturnType>
+<Implementation><![CDATA[
+	'Define o tipo de Query
+    If ASQL = "" Then
+      sql = "LinFOOD.Classe:Extent"
+    Else
+      sql = "%DynamicQuery:SQL"
+    End If  
+    'Cria um novo ResultSet
+    ext = New %ResultSet(sql)
+    'Executa a query
+    If ASQL <> "" Then
+      ext.Prepare(ASQL)
+    End If  
+    ext.Execute()
+    'Cria a lista de objetos
+	listobj = New %ListOfObjects
+	'Informa o tipo de objetos para armazenar na lista
+	listobj.ElementType = "LinFOOD.Classe"
+	'Guarda os objetos na lista
+	While (ext.Next())
+	   sc = listobj.InsertObjectId(ext.GetData(1))
+	Wend
+	'Retorna a lista de objetos
+	Return listobj
+
+]]></Implementation>
+</Method>
+
+<Method name="Inserir">
+<Description>
+Insere uma nova classe de produto ao cadastro. Retorna o objeto criado</Description>
+<FormalSpec>ADescricao:%String</FormalSpec>
+<Language>basic</Language>
+<ReturnType>Classe</ReturnType>
+<Implementation><![CDATA[
+	obj = New Classe
+	obj.Descricao = ADescricao
+	Dim sc As %Integer
+	sc = obj.%Save()
+	If sc = 1 Then
+	  Return obj
+	Else
+	  Return ""
+	End If
+
+]]></Implementation>
+</Method>
+
+<Method name="Consultar">
+<Description>
+Retorna uma classe de produto (objeto) pelo Id</Description>
+<FormalSpec>Aid:%Integer</FormalSpec>
+<Language>basic</Language>
+<ReturnType>Classe</ReturnType>
+<Implementation><![CDATA[
+	obj = OpenId Classe(Aid)
+	Return obj
+
+]]></Implementation>
+</Method>
+
+<Method name="Alterar">
+<Description>
+Altera uma classe de produto. Retorna o objeto alterado</Description>
+<FormalSpec>Aid:%Integer,ADescricao:%String</FormalSpec>
+<Language>basic</Language>
+<ReturnType>Classe</ReturnType>
+<Implementation><![CDATA[
+	obj = OpenId Classe(Aid)
+	obj.Descricao = ADescricao
+	Dim sc As %Integer
+	sc = obj.%Save()
+	If sc = 1 Then
+	  Return obj
+	Else
+	  Return ""
+	End If
+
+]]></Implementation>
+</Method>
+
+<Method name="Excluir">
+<Description>
+Exclui uma classe de produto. Retorna True se foi bem sucedido</Description>
+<FormalSpec>Aid:%Integer</FormalSpec>
+<Language>basic</Language>
+<ReturnType>%Boolean</ReturnType>
+<Implementation><![CDATA[
+	'verifica se existe produto associado
+	prod = New Produto
+	lista = prod.Listar()
+	existe = False
+	For i = 1 To lista.Count()
+	  If lista.GetAt(i).Classe.Id = Aid Then
+	    existe = True
+	  End If
+	Next i
+	prod = Nothing
+	lista = Nothing
+	'se existe produto associado, não exclui classe
+	If existe = True Then
+	  Return False
+	End If
+	obj = OpenId Classe(Aid)
+	Dim sc As %Integer
+	sc = obj.%DeleteId(Aid)
+	If sc = 1 Then
+	 Return True
+	Else
+	 Return False
+	End If
+
+]]></Implementation>
+</Method>
+
+<Storage name="Default">
+<Type>%Library.CacheStorage</Type>
+<DataLocation>^LinFOOD.ClasseD</DataLocation>
+<DefaultData>ClasseDefaultData</DefaultData>
+<IdLocation>^LinFOOD.ClasseD</IdLocation>
+<IndexLocation>^LinFOOD.ClasseI</IndexLocation>
+<StreamLocation>^LinFOOD.ClasseS</StreamLocation>
+<Data name="ClasseDefaultData">
+<Value name="1">
+<Value>%%CLASSNAME</Value>
+</Value>
+<Value name="2">
+<Value>Descricao</Value>
+</Value>
+</Data>
+</Storage>
+</Class>
+<Class name="LinFOOD.Configuracao">
+<Description>
+Esta classe armazena as configurações</Description>
+<ClassType>persistent</ClassType>
+<Language>basic</Language>
+<ProcedureBlock>1</ProcedureBlock>
+<Super>%Persistent</Super>
+<TimeChanged>59414,53243.39</TimeChanged>
+
+<Property name="QtdMesas">
+<Description>
+Define a Quantidade de Mesas do Restaurante</Description>
+<Type>%Integer</Type>
+<Required>1</Required>
+</Property>
+
+<Property name="TxServico">
+<Description><![CDATA[
+Define a Taxa de Serviço em Percentual -> 0.1 = 10%]]></Description>
+<Type>%Float</Type>
+<Required>1</Required>
+</Property>
+
+<Method name="Configurar">
+<Description><![CDATA[
+Configura a Taxa de Serviço e Qtd de Mesas<br>
+Retorna Nothing se há mesas pendentes]]></Description>
+<FormalSpec>AQtdMesas:%Integer=10,ATxServico:%Float=0.1</FormalSpec>
+<ReturnType>Configuracao</ReturnType>
+<Implementation><![CDATA[
+    ext = New %ResultSet("LinFOOD.Configuracao:Extent")
+    ext.Execute()
+    If Not ext.Next() Then
+      obj = New Configuracao
+      obj.QtdMesas = 10
+      obj.TxServico = 0.1
+      sc = obj.%Save()
+      ext.Execute()
+      ext.Next()
+    End If
+    obj = OpenId Configuracao(ext.GetData(1))
+    mesa = New Mesa
+    oldqtd = obj.QtdMesas
+    oldtx = obj.TxServico
+    obj.QtdMesas = AQtdMesas
+    obj.TxServico = ATxServico
+    sc = obj.%Save()
+    'cria as mesas
+    If Not mesa.CriarMesas() Then
+      obj.QtdMesas = oldqtd
+      obj.TxServico = oldtx
+      sc = obj.%Save()
+      Return Nothing
+    Else
+      Return obj
+    End If
+
+]]></Implementation>
+</Method>
+
+<Method name="RetornarConfig">
+<Description>
+Retorna a configuração gravada</Description>
+<ReturnType>Configuracao</ReturnType>
+<Implementation><![CDATA[
+    ext = New %ResultSet("LinFOOD.Configuracao:Extent")
+    ext.Execute()
+    If Not ext.Next() Then
+      obj = Me.Configurar()
+      ext.Execute()
+      ext.Next()
+    End If
+    obj = OpenId Configuracao(ext.GetData(1))
+    Return obj
+
+]]></Implementation>
+</Method>
+
+<Storage name="Default">
+<Type>%Library.CacheStorage</Type>
+<DataLocation>^LinFOOD.ConfiguracaoD</DataLocation>
+<DefaultData>ConfiguracaoDefaultData</DefaultData>
+<IdLocation>^LinFOOD.ConfiguracaoD</IdLocation>
+<IndexLocation>^LinFOOD.ConfiguracaoI</IndexLocation>
+<StreamLocation>^LinFOOD.ConfiguracaoS</StreamLocation>
+<Data name="ConfiguracaoDefaultData">
+<Value name="1">
+<Value>%%CLASSNAME</Value>
+</Value>
+<Value name="2">
+<Value>QtdMesas</Value>
+</Value>
+<Value name="3">
+<Value>TxServico</Value>
+</Value>
+</Data>
+</Storage>
+</Class>
+<Class name="LinFOOD.Item">
+<Description>
+Esta classe define um item do pedido</Description>
+<ClassType>serial</ClassType>
+<Language>basic</Language>
+<ProcedureBlock>1</ProcedureBlock>
+<Super>%SerialObject</Super>
+<TimeChanged>59428,62768.421</TimeChanged>
+
+<Property name="Observacao">
+<Description>
+Define o conjunto de observações do item</Description>
+<Type>%String</Type>
+<Collection>list</Collection>
+</Property>
+
+<Property name="Quantidade">
+<Description>
+Define a quantidade de produtos</Description>
+<Type>%Float</Type>
+<Required>1</Required>
+</Property>
+
+<Property name="Produto">
+<Description>
+Define o produto relacionado ao item</Description>
+<Type>Produto</Type>
+<Required>1</Required>
+</Property>
+
+<ForeignKey name="ProdutoId">
+<Properties>Produto</Properties>
+<ReferencedClass>LinFOOD.Produto</ReferencedClass>
+</ForeignKey>
+
+<Property name="Impresso">
+<Description>
+Informa se o item já foi impresso</Description>
+<Type>%Boolean</Type>
+</Property>
+
+<Method name="CalcularTotal">
+<Description>
+Calcula o valor total do item (preço * quantidade)</Description>
+<ReturnType>%Currency</ReturnType>
+<Implementation><![CDATA[
+	Return Me.Produto.Preco * Me.Quantidade
+
+]]></Implementation>
+</Method>
+
+<Storage name="Default">
+<Type>%Library.CacheSerialState</Type>
+<State>ItemState</State>
+<StreamLocation>^LinFOOD.ItemS</StreamLocation>
+<Data name="ItemState">
+<Subscript>"LinFOOD.Item"</Subscript>
+<Value name="1">
+<Value>Observacao</Value>
+</Value>
+<Value name="2">
+<Value>Produto</Value>
+</Value>
+<Value name="3">
+<Value>Quantidade</Value>
+</Value>
+<Value name="4">
+<Value>Impresso</Value>
+</Value>
+</Data>
+</Storage>
+</Class>
+<Class name="LinFOOD.ItemHistorico">
+<Description>
+Esta classe define um item do pedido no histórico</Description>
+<ClassType>serial</ClassType>
+<Language>basic</Language>
+<ProcedureBlock>1</ProcedureBlock>
+<Super>%SerialObject</Super>
+<TimeChanged>59428,69965.875</TimeChanged>
+
+<Property name="Quantidade">
+<Description>
+Define a quantidade de produtos</Description>
+<Type>%Float</Type>
+<Required>1</Required>
+</Property>
+
+<Property name="Classe">
+<Description>
+Define a Descrição da Classe a qual o produto pertence</Description>
+<Type>%String</Type>
+<Required>1</Required>
+</Property>
+
+<Property name="CodProduto">
+<Description>
+Define o código do produto</Description>
+<Type>%Integer</Type>
+<Required>1</Required>
+</Property>
+
+<Property name="Descricao">
+<Description>
+Define a descrição do produto</Description>
+<Type>%String</Type>
+<Required>1</Required>
+</Property>
+
+<Property name="Preco">
+<Description>
+Define o preço unitário do produto</Description>
+<Type>%Currency</Type>
+<Required>1</Required>
+</Property>
+
+<Method name="CalcularTotal">
+<Description>
+Calcula o valor total do item (preço * quantidade)</Description>
+<ReturnType>%Currency</ReturnType>
+<Implementation><![CDATA[
+	Return Me.Preco * Me.Quantidade
+
+]]></Implementation>
+</Method>
+
+<Storage name="Default">
+<Type>%Library.CacheSerialState</Type>
+<State>ItemHistoricoState</State>
+<StreamLocation>^LinFOOD.ItemHistoricoS</StreamLocation>
+<Data name="ItemHistoricoState">
+<Subscript>"LinFOOD.ItemHistorico"</Subscript>
+<Value name="1">
+<Value>Classe</Value>
+</Value>
+<Value name="2">
+<Value>CodProduto</Value>
+</Value>
+<Value name="3">
+<Value>Descricao</Value>
+</Value>
+<Value name="4">
+<Value>Preco</Value>
+</Value>
+<Value name="5">
+<Value>Quantidade</Value>
+</Value>
+</Data>
+</Storage>
+</Class>
+<Class name="LinFOOD.Mesa">
+<Description>
+Esta classe define uma Mesa (pedido)</Description>
+<ClassType>persistent</ClassType>
+<Language>basic</Language>
+<ProcedureBlock>1</ProcedureBlock>
+<Super>%Persistent</Super>
+<TimeChanged>59428,73433.89</TimeChanged>
+
+<Property name="Itens">
+<Description>
+Define os itens do pedido</Description>
+<Type>Item</Type>
+<Collection>list</Collection>
+</Property>
+
+<Property name="Desconto">
+<Description>
+Define o valor do desconto</Description>
+<Type>%Currency</Type>
+</Property>
+
+<Property name="NoComanda">
+<Description>
+Define o número da comanda</Description>
+<Type>%Integer</Type>
+</Property>
+
+<Property name="NoMesa">
+<Description>
+Define o número da mesa</Description>
+<Type>%Integer</Type>
+<Required>1</Required>
+</Property>
+
+<Property name="NomeFuncAbriu">
+<Description>
+Define o usuário que abriu a mesa</Description>
+<Type>%String</Type>
+</Property>
+
+<Property name="NomeFuncFechou">
+<Description>
+Define o usuário que fechou a mesa</Description>
+<Type>%String</Type>
+</Property>
+
+<Property name="NomeFuncRecebeu">
+<Description>
+Define o usuário que recebeu a mesa</Description>
+<Type>%String</Type>
+</Property>
+
+<Property name="Status">
+<Description><![CDATA[
+Define o status da mesa<br>
+"L", "A", "F" (Livre, Aberta, Fechada)]]></Description>
+<Type>%String</Type>
+<Required>1</Required>
+<Parameter name="MAXLEN" value="1"/>
+</Property>
+
+<Property name="Subtotal">
+<Description>
+Define o valor da conta, sem desconto e sem tx serviço</Description>
+<Type>%Currency</Type>
+</Property>
+
+<Property name="TxServico">
+<Description><![CDATA[
+Define a taxa de serviço a ser cobrada (%)<br>
+0.1 = 10%]]></Description>
+<Type>%Float</Type>
+</Property>
+
+<Index name="NoMesaIndex">
+<Properties>NoMesa</Properties>
+<Unique>1</Unique>
+</Index>
+
+<Property name="Id">
+<Description>
+Retorna o Id do objeto instanciado</Description>
+<Type>%Integer</Type>
+<Calculated>1</Calculated>
+<Transient>1</Transient>
+<ReadOnly>1</ReadOnly>
+</Property>
+
+<Method name="IdGet">
+<Description>
+Implementação da propriedade Id</Description>
+<Language>basic</Language>
+<ReturnType>%Integer</ReturnType>
+<Implementation><![CDATA[
+ return Me.%Id()
+
+]]></Implementation>
+</Method>
+
+<Method name="CalculaSubTotal">
+<Description>
+Calcula o Subtotal da conta</Description>
+<Private>1</Private>
+<ReturnType>%Currency</ReturnType>
+<Implementation><![CDATA[
+	st = 0.0
+	For i = 1 To Me.Itens.Count()
+	  item = Me.Itens.GetAt(i)
+	  st = st + item.CalcularTotal()
+	Next i
+	Return st
+
+]]></Implementation>
+</Method>
+
+<Method name="CalcularServico">
+<Description>
+Calcula o valor a ser paga pelo serviço</Description>
+<ReturnType>%Currency</ReturnType>
+<Implementation><![CDATA[
+  Return Me.Subtotal * Me.TxServico	
+
+]]></Implementation>
+</Method>
+
+<Method name="CalcularTotal">
+<Description>
+Calcula o valor total da conta</Description>
+<ReturnType>%Currency</ReturnType>
+<Implementation><![CDATA[
+  Return Me.Subtotal + Me.CalcularServico() - Me.Desconto
+
+]]></Implementation>
+</Method>
+
+<Method name="Listar">
+<Description><![CDATA[
+Retorna os objetos armazenados através de uma lista.<br>
+O parâmetro define a Query a ser executada (default = "" = todos objetos).<p>
+Para obter os objetos use os métodos GetAt(i) e Count() da Lista de objetos.]]></Description>
+<FormalSpec>ASQL:%String=""</FormalSpec>
+<ReturnType>%ListOfObjects</ReturnType>
+<Implementation><![CDATA[
+	'Define o tipo de Query
+    If ASQL = "" Then
+      sql = "LinFOOD.Mesa:Extent"
+    Else
+      sql = "%DynamicQuery:SQL"
+    End If  
+    'Cria um novo ResultSet
+    ext = New %ResultSet(sql)
+    'Executa a query
+    If ASQL <> "" Then
+      ext.Prepare(ASQL)
+    End If  
+    ext.Execute()
+    'Cria a lista de objetos
+	listobj = New %ListOfObjects
+	'Informa o tipo de objetos para armazenar na lista
+	listobj.ElementType = "LinFOOD.Mesa"
+	'Guarda os objetos na lista
+	While (ext.Next())
+	   sc = listobj.InsertObjectId(ext.GetData(1))
+	Wend
+	'Retorna a lista de objetos
+	Return listobj
+
+]]></Implementation>
+</Method>
+
+<Method name="CriarMesas">
+<Description><![CDATA[
+Cria a quantidade de mesas especificada pela configuração<br>
+Retorna False se há mesas abertas ou fechadas (pendentes)]]></Description>
+<ReturnType>%Boolean</ReturnType>
+<Implementation><![CDATA[
+	lista = Me.Listar()
+	'verifica se há mesas pendentes
+	For i = 1 To lista.Count()
+	  If lista.GetAt(i).Status <> "L" Then
+	    Return False
+	  End If
+	Next i
+	'apaga todas mesas
+	For i = 1 To lista.Count()
+	  sc = Me.%DeleteId(lista.GetAt(i).Id)
+	Next i
+	'pega a configuracao
+	config = New Configuracao
+	config = config.RetornarConfig()
+	qtd = config.QtdMesas
+	tx = config.TxServico
+	'cria mesas livres
+	sc = True
+	For i = 1 To qtd
+	  mesa = New Mesa
+	  mesa.Itens = Nothing
+	  mesa.Desconto = 0
+	  mesa.NoComanda = 0
+	  mesa.NoMesa = i
+	  mesa.NomeFuncAbriu = ""
+	  mesa.NomeFuncFechou = ""
+	  mesa.NomeFuncRecebeu = ""
+	  mesa.Status = "L"
+	  mesa.Subtotal = 0
+	  mesa.TxServico = tx
+	  sc = sc And mesa.%Save()
+	Next i
+	Return sc
+
+]]></Implementation>
+</Method>
+
+<Method name="Consultar">
+<Description>
+Retorna um objeto Mesa pelo número da mesa</Description>
+<FormalSpec>ANoMesa:%Integer</FormalSpec>
+<ReturnType>Mesa</ReturnType>
+<Implementation><![CDATA[
+	lista = Me.Listar()
+	For i = 1 To lista.Count()
+	  obj = lista.GetAt(i)
+	  If obj.NoMesa = ANoMesa Then
+	    Return obj
+	  End If
+	Next i
+	Return ""
+
+]]></Implementation>
+</Method>
+
+<Method name="InserirItem">
+<Description>
+Insere um item ao pedido</Description>
+<FormalSpec>AProdutoId:%Integer,AQuantidade:%Float=1,AObservacao:%String,ANoComanda:%Integer=0,ANomeUsuario:%String=""</FormalSpec>
+<ReturnType>%Boolean</ReturnType>
+<Implementation><![CDATA[
+  If Me.NoMesa < 1 Then
+    Return False
+  End If  
+  produto = OpenId Produto(AProdutoId)
+  item = New Item
+  item.Produto = produto
+  item.Quantidade = AQuantidade
+  item.Observacao.Clear()
+  item.Impresso = False
+  i = 1
+  While (i < Len(AObservacao))
+    linha = Mid(AObservacao,i,InStr(i,AObservacao,Chr(13)) - i)
+    item.Observacao.Insert(linha)
+    i = InStr(i,AObservacao,Chr(13)) + 2
+  Wend
+  Me.Itens.Insert(item)
+  If Me.Status = "L" Then
+    Me.NoComanda = ANoComanda
+    Me.NomeFuncAbriu = ANomeUsuario
+  End If
+  Me.Status = "A"
+  'calcula o subtotal
+  Me.Subtotal = Me.CalculaSubTotal()
+  sc = Me.%Save()
+  Return sc
+
+]]></Implementation>
+</Method>
+
+<Method name="ImprimirItens">
+<Description>
+Marca todos os itens como impressos</Description>
+<Language>basic</Language>
+<ReturnType>%Boolean</ReturnType>
+<Implementation><![CDATA[
+    If Me.NoMesa < 1 Then
+      Return False 
+    End If  
+	For i = 1 To Me.Itens.Count()
+	  item = Me.Itens.GetAt(i)
+	  item.Impresso = True
+	Next i 
+	sc = Me.%Save()
+	Return sc
+
+]]></Implementation>
+</Method>
+
+<Method name="CancelarItem">
+<Description>
+Cancela um item do pedido</Description>
+<FormalSpec>AIndex:%Integer=0</FormalSpec>
+<Language>basic</Language>
+<ReturnType>%Boolean</ReturnType>
+<Implementation><![CDATA[
+    If Me.NoMesa < 1 Then
+      Return False
+    End If  
+	canc = True
+	If AIndex = 0 Then
+	  sc = Me.Itens.Clear()
+	  If sc = 0 Then
+	    canc = False
+	  End If
+	Else
+  	  obj = Me.Itens.RemoveAt(AIndex)
+	End If
+	Me.Subtotal = Me.CalculaSubTotal()
+    Me.Status = "A"
+	'se removeu todos itens
+	If Me.Itens.Count() = 0 Then
+	  Me.NoComanda = 0
+	  Me.Status = "L"
+	  Me.Desconto = 0
+	  Me.NomeFuncAbriu = ""
+	  Me.NomeFuncFechou = ""
+	  Me.NomeFuncRecebeu = ""
+	  Me.Subtotal = 0
+	End If
+    canc = canc And Me.%Save()
+    Return canc
+
+]]></Implementation>
+</Method>
+
+<Method name="FecharConta">
+<Description>
+Fecha a conta de uma mesa</Description>
+<FormalSpec>ANomeUsuario:%String,ADesconto:%Currency=0,ATxServico:%Float=-1</FormalSpec>
+<Language>basic</Language>
+<ReturnType>%Boolean</ReturnType>
+<Implementation><![CDATA[
+    If (Me.NoMesa < 1) Or (Me.Status <> "A") Then
+      Return False
+    End If  
+    Me.Desconto = ADesconto
+    If ATxServico >= 0 Then
+      Me.TxServico = ATxServico
+    End If
+    Me.Status = "F"
+    Me.NomeFuncFechou = ANomeUsuario
+    sc = Me.%Save()
+    Return sc
+
+]]></Implementation>
+</Method>
+
+<Method name="ReceberConta">
+<Description>
+Recebe a Conta de uma mesa. Retorna valor do Troco</Description>
+<FormalSpec>ANomeUsuario:%String,AValorRecebido:%Currency,ADesconto:%Currency=0,ATxServico:%Float=-1</FormalSpec>
+<ReturnType>%Currency</ReturnType>
+<Implementation><![CDATA[
+    If (Me.NoMesa < 1) Or (Me.Status <> "F") Then
+      Return -1
+    End If  
+    Me.NomeFuncRecebeu = ANomeUsuario
+    Me.Desconto = ADesconto
+    If ATxServico >= 0 Then
+      Me.TxServico = ATxServico
+    End If
+    'calcular o troco
+    troco = AValorRecebido - Me.CalcularTotal()
+    'gravar em histórico
+    hist = New MesaHistorico
+    ok = hist.InserirMesa(Me)
+    'liberar mesa 
+    Me.NoComanda = 0
+	Me.Status = "L"
+	Me.Desconto = 0
+	Me.NomeFuncAbriu = ""
+	Me.NomeFuncFechou = ""
+	Me.NomeFuncRecebeu = ""
+	Me.Subtotal = 0
+	Me.Itens.Clear()
+	'pega a configuracao
+	config = New Configuracao
+	config = config.RetornarConfig()
+	Me.TxServico = config.TxServico
+	'grava mesa
+    ok = ok And Me.%Save()
+    If Not ok Then
+      troco = -1
+    End If
+    Return troco
+
+]]></Implementation>
+</Method>
+
+<Storage name="Default">
+<Type>%Library.CacheStorage</Type>
+<DataLocation>^LinFOOD.MesaD</DataLocation>
+<DefaultData>MesaDefaultData</DefaultData>
+<IdLocation>^LinFOOD.MesaD</IdLocation>
+<IndexLocation>^LinFOOD.MesaI</IndexLocation>
+<StreamLocation>^LinFOOD.MesaS</StreamLocation>
+<Data name="MesaDefaultData">
+<Value name="1">
+<Value>%%CLASSNAME</Value>
+</Value>
+<Value name="2">
+<Value>Desconto</Value>
+</Value>
+<Value name="3">
+<Value>Itens</Value>
+</Value>
+<Value name="4">
+<Value>NoComanda</Value>
+</Value>
+<Value name="5">
+<Value>NoMesa</Value>
+</Value>
+<Value name="6">
+<Value>NomeFuncAbriu</Value>
+</Value>
+<Value name="7">
+<Value>NomeFuncFechou</Value>
+</Value>
+<Value name="8">
+<Value>NomeFuncRecebeu</Value>
+</Value>
+<Value name="9">
+<Value>Status</Value>
+</Value>
+<Value name="10">
+<Value>Subtotal</Value>
+</Value>
+<Value name="11">
+<Value>TxServico</Value>
+</Value>
+</Data>
+</Storage>
+</Class>
+<Class name="LinFOOD.MesaHistorico">
+<Description>
+Esta classe mantém um histórico das vendas realizadas</Description>
+<ClassType>persistent</ClassType>
+<Language>basic</Language>
+<ProcedureBlock>1</ProcedureBlock>
+<Super>%Persistent</Super>
+<TimeChanged>59428,73931.14</TimeChanged>
+
+<Property name="DataHora">
+<Description>
+Define Data e Hora da venda</Description>
+<Type>%String</Type>
+</Property>
+
+<Property name="Itens">
+<Description>
+Define os itens do pedido</Description>
+<Type>ItemHistorico</Type>
+<Collection>list</Collection>
+</Property>
+
+<Property name="Desconto">
+<Description>
+Define o valor do desconto</Description>
+<Type>%Currency</Type>
+</Property>
+
+<Property name="NoComanda">
+<Description>
+Define o número da comanda</Description>
+<Type>%Integer</Type>
+</Property>
+
+<Property name="NoMesa">
+<Description>
+Define o número da mesa</Description>
+<Type>%Integer</Type>
+<Required>1</Required>
+</Property>
+
+<Property name="NomeFuncAbriu">
+<Description>
+Define o usuário que abriu a mesa</Description>
+<Type>%String</Type>
+</Property>
+
+<Property name="NomeFuncFechou">
+<Description>
+Define o usuário que fechou a mesa</Description>
+<Type>%String</Type>
+</Property>
+
+<Property name="NomeFuncRecebeu">
+<Description>
+Define o usuário que recebeu a mesa</Description>
+<Type>%String</Type>
+</Property>
+
+<Property name="Subtotal">
+<Description>
+Define o valor da conta, sem desconto e sem tx serviço</Description>
+<Type>%Currency</Type>
+</Property>
+
+<Property name="TxServico">
+<Description><![CDATA[
+Define a taxa de serviço a ser cobrada (%)<br>
+0.1 = 10%]]></Description>
+<Type>%Float</Type>
+</Property>
+
+<Index name="DataHoraIndex">
+<Properties>DataHora</Properties>
+<Unique>1</Unique>
+</Index>
+
+<Property name="Id">
+<Description>
+Retorna o Id do objeto instanciado</Description>
+<Type>%Integer</Type>
+<Calculated>1</Calculated>
+<Transient>1</Transient>
+<ReadOnly>1</ReadOnly>
+</Property>
+
+<Method name="IdGet">
+<Description>
+Implementação da propriedade Id</Description>
+<Language>basic</Language>
+<ReturnType>%Integer</ReturnType>
+<Implementation><![CDATA[
+ return Me.%Id()
+
+]]></Implementation>
+</Method>
+
+<Method name="CalcularServico">
+<Description>
+Calcula o valor a ser paga pelo serviço</Description>
+<ReturnType>%Currency</ReturnType>
+<Implementation><![CDATA[
+  Return Me.Subtotal * Me.TxServico	
+
+]]></Implementation>
+</Method>
+
+<Method name="CalcularTotal">
+<Description>
+Calcula o valor total da conta</Description>
+<ReturnType>%Currency</ReturnType>
+<Implementation><![CDATA[
+  Return Me.Subtotal + Me.CalcularServico() - Me.Desconto
+
+]]></Implementation>
+</Method>
+
+<Method name="Listar">
+<Description><![CDATA[
+Retorna os objetos armazenados através de uma lista.<br>
+O parâmetro define a Query a ser executada (default = "" = todos objetos).<p>
+Para obter os objetos use os métodos GetAt(i) e Count() da Lista de objetos.]]></Description>
+<FormalSpec>ASQL:%String=""</FormalSpec>
+<ReturnType>%ListOfObjects</ReturnType>
+<Implementation><![CDATA[
+	'Define o tipo de Query
+    If ASQL = "" Then
+      sql = "LinFOOD.MesaHistorico:Extent"
+    Else
+      sql = "%DynamicQuery:SQL"
+    End If  
+    'Cria um novo ResultSet
+    ext = New %ResultSet(sql)
+    'Executa a query
+    If ASQL <> "" Then
+      ext.Prepare(ASQL)
+    End If  
+    ext.Execute()
+    'Cria a lista de objetos
+	listobj = New %ListOfObjects
+	'Informa o tipo de objetos para armazenar na lista
+	listobj.ElementType = "LinFOOD.MesaHistorico"
+	'Guarda os objetos na lista
+	While (ext.Next())
+	   sc = listobj.InsertObjectId(ext.GetData(1))
+	Wend
+	'Retorna a lista de objetos
+	Return listobj
+
+]]></Implementation>
+</Method>
+
+<Method name="InserirMesa">
+<Description>
+Insere uma mesa no histórico</Description>
+<FormalSpec>AMesa:Mesa</FormalSpec>
+<Language>basic</Language>
+<ReturnType>%Boolean</ReturnType>
+<Implementation><![CDATA[
+	hist = New MesaHistorico
+	hist.DataHora = Now()
+	hist.Desconto = AMesa.Desconto
+	hist.NoComanda = AMesa.NoComanda
+	hist.NoMesa = AMesa.NoMesa
+	hist.NomeFuncAbriu = AMesa.NomeFuncAbriu
+	hist.NomeFuncFechou = AMesa.NomeFuncFechou
+	hist.NomeFuncRecebeu = AMesa.NomeFuncRecebeu
+	hist.Subtotal = AMesa.Subtotal
+	hist.TxServico = AMesa.TxServico
+    For i = 1 To AMesa.Itens.Count()
+      item = AMesa.Itens.GetAt(i)
+      itemhist = New ItemHistorico
+      itemhist.Quantidade = item.Quantidade
+      itemhist.Classe = item.Produto.Classe.Descricao
+      itemhist.CodProduto = item.Produto.CodProduto
+      itemhist.Descricao = item.Produto.Descricao
+      itemhist.Preco = item.Produto.Preco
+      hist.Itens.Insert(itemhist)    
+    Next i
+    sc = hist.%Save()
+    Return sc
+
+]]></Implementation>
+</Method>
+
+<Storage name="Default">
+<Type>%Library.CacheStorage</Type>
+<DataLocation>^LinFOOD.MesaHistoricoD</DataLocation>
+<DefaultData>MesaHistoricoDefaultData</DefaultData>
+<IdLocation>^LinFOOD.MesaHistoricoD</IdLocation>
+<IndexLocation>^LinFOOD.MesaHistoricoI</IndexLocation>
+<StreamLocation>^LinFOOD.MesaHistoricoS</StreamLocation>
+<Data name="MesaHistoricoDefaultData">
+<Value name="1">
+<Value>%%CLASSNAME</Value>
+</Value>
+<Value name="2">
+<Value>DataHora</Value>
+</Value>
+<Value name="3">
+<Value>Desconto</Value>
+</Value>
+<Value name="4">
+<Value>Itens</Value>
+</Value>
+<Value name="5">
+<Value>NoComanda</Value>
+</Value>
+<Value name="6">
+<Value>NoMesa</Value>
+</Value>
+<Value name="7">
+<Value>NomeFuncAbriu</Value>
+</Value>
+<Value name="8">
+<Value>NomeFuncFechou</Value>
+</Value>
+<Value name="9">
+<Value>NomeFuncRecebeu</Value>
+</Value>
+<Value name="10">
+<Value>Subtotal</Value>
+</Value>
+<Value name="11">
+<Value>TxServico</Value>
+</Value>
+</Data>
+</Storage>
+</Class>
+<Class name="LinFOOD.Observacao">
+<Description>
+Esta classe armazena o cadastro de observações</Description>
+<ClassType>persistent</ClassType>
+<Language>basic</Language>
+<ProcedureBlock>1</ProcedureBlock>
+<Super>%Persistent</Super>
+<TimeChanged>59414,47770.531</TimeChanged>
+
+<Property name="Descricao">
+<Description>
+Define a Descrição da Observação, e deve ser única</Description>
+<Type>%String</Type>
+<Required>1</Required>
+</Property>
+
+<Index name="DescricaoIndex">
+<Description>
+Este índice agiliza buscas no Banco de Dados</Description>
+<Properties>Descricao</Properties>
+<Unique>1</Unique>
+</Index>
+
+<Property name="Id">
+<Description>
+Retorna o Id do objeto instanciado</Description>
+<Type>%Integer</Type>
+<Calculated>1</Calculated>
+<Transient>1</Transient>
+<ReadOnly>1</ReadOnly>
+</Property>
+
+<Method name="IdGet">
+<Description>
+Implementação da propriedade Id</Description>
+<Language>basic</Language>
+<ReturnType>%Integer</ReturnType>
+<Implementation><![CDATA[
+ return Me.%Id()
+
+]]></Implementation>
+</Method>
+
+<Method name="Listar">
+<Description><![CDATA[
+Retorna os objetos armazenados através de uma lista.<br>
+O parâmetro define a Query a ser executada (default = "" = todos objetos).<p>
+Para obter os objetos use os métodos GetAt(i) e Count() da Lista de objetos.]]></Description>
+<FormalSpec>ASQL:%String=""</FormalSpec>
+<Language>basic</Language>
+<ReturnType>%ListOfObjects</ReturnType>
+<Implementation><![CDATA[
+	'Define o tipo de Query
+    If ASQL = "" Then
+      sql = "LinFOOD.Observacao:Extent"
+    Else
+      sql = "%DynamicQuery:SQL"
+    End If  
+    'Cria um novo ResultSet
+    ext = New %ResultSet(sql)
+    'Executa a query
+    If ASQL <> "" Then
+      ext.Prepare(ASQL)
+    End If  
+    ext.Execute()
+    'Cria a lista de objetos
+	listobj = New %ListOfObjects
+	'Informa o tipo de objetos para armazenar na lista
+	listobj.ElementType = "LinFOOD.Observacao"
+	'Guarda os objetos na lista
+	While (ext.Next())
+	   sc = listobj.InsertObjectId(ext.GetData(1))
+	Wend
+	'Retorna a lista de objetos
+	Return listobj
+
+]]></Implementation>
+</Method>
+
+<Method name="Inserir">
+<Description>
+Insere uma nova observação ao cadastro. Retorna o objeto criado</Description>
+<FormalSpec>ADescricao:%String</FormalSpec>
+<Language>basic</Language>
+<ReturnType>Observacao</ReturnType>
+<Implementation><![CDATA[
+	obj = New Observacao
+	obj.Descricao = ADescricao
+	Dim sc As %Integer
+	sc = obj.%Save()
+	If sc = 1 Then
+	  Return obj
+	Else
+	  Return ""
+	End If
+
+]]></Implementation>
+</Method>
+
+<Method name="Consultar">
+<Description>
+Retorna uma observacao (objeto) pelo Id</Description>
+<FormalSpec>Aid:%Integer</FormalSpec>
+<Language>basic</Language>
+<ReturnType>Observacao</ReturnType>
+<Implementation><![CDATA[
+	obj = OpenId Observacao(Aid)
+	Return obj
+
+]]></Implementation>
+</Method>
+
+<Method name="Alterar">
+<Description>
+Altera uma observação. Retorna o objeto alterado</Description>
+<FormalSpec>Aid:%Integer,ADescricao:%String</FormalSpec>
+<Language>basic</Language>
+<ReturnType>Observacao</ReturnType>
+<Implementation><![CDATA[
+	obj = OpenId Observacao(Aid)
+	obj.Descricao = ADescricao
+	Dim sc As %Integer
+	sc = obj.%Save()
+	If sc = 1 Then
+	  Return obj
+	Else
+	  Return ""
+	End If
+
+]]></Implementation>
+</Method>
+
+<Method name="Excluir">
+<Description>
+Exclui uma observação. Retorna True se foi bem sucedido</Description>
+<FormalSpec>Aid:%Integer</FormalSpec>
+<Language>basic</Language>
+<ReturnType>%Boolean</ReturnType>
+<Implementation><![CDATA[
+	obj = OpenId Observacao(Aid)
+	Dim sc As %Integer
+	sc = obj.%DeleteId(Aid)
+	If sc = 1 Then
+	 Return True
+	Else
+	 Return False
+	End If
+
+]]></Implementation>
+</Method>
+
+<Storage name="Default">
+<Type>%Library.CacheStorage</Type>
+<DataLocation>^LinFOOD.ObservacaoD</DataLocation>
+<DefaultData>ObservacaoDefaultData</DefaultData>
+<IdLocation>^LinFOOD.ObservacaoD</IdLocation>
+<IndexLocation>^LinFOOD.ObservacaoI</IndexLocation>
+<StreamLocation>^LinFOOD.ObservacaoS</StreamLocation>
+<Data name="ObservacaoDefaultData">
+<Value name="1">
+<Value>%%CLASSNAME</Value>
+</Value>
+<Value name="2">
+<Value>Descricao</Value>
+</Value>
+</Data>
+</Storage>
+</Class>
+<Class name="LinFOOD.Produto">
+<Description>
+Esta classe armazena o Cadastro de Produtos</Description>
+<ClassType>persistent</ClassType>
+<ProcedureBlock>1</ProcedureBlock>
+<Super>%Persistent</Super>
+<TimeChanged>59444,75156.109</TimeChanged>
+<TimeCreated>59413,85251.656</TimeCreated>
+
+<Property name="Classe">
+<Description>
+Define a Classe a qual o produto pertence</Description>
+<Type>Classe</Type>
+<Required>1</Required>
+</Property>
+
+<ForeignKey name="ClasseId">
+<Properties>Classe</Properties>
+<ReferencedClass>LinFOOD.Classe</ReferencedClass>
+</ForeignKey>
+
+<Property name="CodProduto">
+<Description>
+Define o código do produto</Description>
+<Type>%Integer</Type>
+<Required>1</Required>
+</Property>
+
+<Property name="Descricao">
+<Description>
+Define a descrição do produto</Description>
+<Type>%String</Type>
+<Required>1</Required>
+</Property>
+
+<Property name="Preco">
+<Description>
+Define o preço unitário do produto</Description>
+<Type>%Currency</Type>
+<Required>1</Required>
+</Property>
+
+<Index name="CodProdutoIndex">
+<Description>
+Este índice agiliza buscas no Banco de Dados</Description>
+<Properties>CodProduto</Properties>
+<Unique>1</Unique>
+</Index>
+
+<Property name="Id">
+<Description>
+Retorna o Id do objeto instanciado</Description>
+<Type>%Integer</Type>
+<Calculated>1</Calculated>
+<Transient>1</Transient>
+<ReadOnly>1</ReadOnly>
+</Property>
+
+<Method name="IdGet">
+<Description>
+Implementação da propriedade Id</Description>
+<Language>basic</Language>
+<ReturnType>%Integer</ReturnType>
+<Implementation><![CDATA[
+ return Me.%Id()
+
+]]></Implementation>
+</Method>
+
+<Method name="Listar">
+<Description><![CDATA[
+Retorna os objetos armazenados através de uma lista.<br>
+O parâmetro define a Query a ser executada (default = "" = todos objetos).<p>
+Para obter os objetos use os métodos GetAt(i) e Count() da Lista de objetos.]]></Description>
+<FormalSpec>ASQL:%String=""</FormalSpec>
+<Language>basic</Language>
+<ReturnType>%ListOfObjects</ReturnType>
+<Implementation><![CDATA[
+	'Define o tipo de Query
+    If ASQL = "" Then
+      sql = "LinFOOD.Produto:Extent"
+    Else
+      sql = "%DynamicQuery:SQL"
+    End If  
+    'Cria um novo ResultSet
+    ext = New %ResultSet(sql)
+    'Executa a query
+    If ASQL <> "" Then
+      ext.Prepare(ASQL)
+    End If  
+    ext.Execute()
+    'Cria a lista de objetos
+	listobj = New %ListOfObjects
+	'Informa o tipo de objetos para armazenar na lista
+	listobj.ElementType = "LinFOOD.Produto"
+	'Guarda os objetos na lista
+	While (ext.Next())
+	   sc = listobj.InsertObjectId(ext.GetData(1))
+	Wend
+	'Retorna a lista de objetos
+	Return listobj
+
+]]></Implementation>
+</Method>
+
+<Method name="Inserir">
+<Description>
+Insere um novo produto ao cadastro. Retorna o objeto criado</Description>
+<FormalSpec>ACodProduto:%Integer,ADescricao:%String,APreco:%Currency,AClasseId:%Integer</FormalSpec>
+<Language>basic</Language>
+<ReturnType>Produto</ReturnType>
+<Implementation><![CDATA[
+	obj = New Produto
+	obj.CodProduto = ACodProduto
+	obj.Descricao = ADescricao
+	obj.Preco = APreco
+	obj.Classe = OpenId Classe(AClasseId)
+	Dim sc As %Integer
+	sc = obj.%Save()
+	If sc = 1 Then
+	  Return obj
+	Else
+	  Return ""
+	End If
+
+]]></Implementation>
+</Method>
+
+<Method name="Consultar">
+<Description>
+Retorna um produto (objeto) pelo Id</Description>
+<FormalSpec>Aid:%Integer</FormalSpec>
+<Language>basic</Language>
+<ReturnType>Produto</ReturnType>
+<Implementation><![CDATA[
+	obj = OpenId Produto(Aid)
+	Return obj
+
+]]></Implementation>
+</Method>
+
+<Method name="Alterar">
+<Description>
+Altera um produto. Retorna o objeto alterado</Description>
+<FormalSpec>Aid:%Integer,ACodProduto:%Integer,ADescricao:%String,APreco:%Integer,AClasseId:%Integer</FormalSpec>
+<Language>basic</Language>
+<ReturnType>Produto</ReturnType>
+<Implementation><![CDATA[
+	obj = OpenId Produto(Aid)
+	obj.CodProduto = ACodProduto
+	obj.Descricao = ADescricao
+	obj.Preco = APreco
+	obj.Classe = OpenId Classe(AClasseId)
+	Dim sc As %Integer
+	sc = obj.%Save()
+	If sc = 1 Then
+	  Return obj
+	Else
+	  Return ""
+	End If
+
+]]></Implementation>
+</Method>
+
+<Method name="Excluir">
+<Description>
+Exclui um produto. Retorna True se foi bem sucedido</Description>
+<FormalSpec>Aid:%Integer</FormalSpec>
+<Language>basic</Language>
+<ReturnType>%Boolean</ReturnType>
+<Implementation><![CDATA[
+	'verifica se existe pedido associado
+	mesa = New Mesa
+	lista = mesa.Listar()
+	existe = False
+	For i = 1 To lista.Count()
+	  itens = lista.GetAt(i).Itens 
+	  For j = 1 To itens.Count() 
+	    If itens.GetAt(j).Produto.Id = Aid Then
+	      existe = True
+	    End If
+	  Next j
+	Next i
+	mesa = Nothing
+	lista = Nothing
+	itens = Nothing
+	'se existe pedido associado, não exclui produto
+	If existe = True Then
+	  Return False
+	End If
+	obj = OpenId Produto(Aid)
+	Dim sc As %Integer
+	sc = obj.%DeleteId(Aid)
+	If sc = 1 Then
+	 Return True
+	Else
+	 Return False
+	End If
+
+]]></Implementation>
+</Method>
+
+<Method name="GetLastCodProduto">
+<Description>
+Retorna o maior código de produto cadastrado</Description>
+<Language>basic</Language>
+<ReturnType>%Integer</ReturnType>
+<Implementation><![CDATA[
+	lista = Me.Listar()
+	lastcod = 0
+	For i = 1 To lista.Count()
+	  produto = lista.GetAt(i)
+	  If produto.CodProduto > lastcod Then
+	    lastcod = produto.CodProduto
+	  End If
+	Next i
+	lista = Nothing
+	Return lastcod
+
+]]></Implementation>
+</Method>
+
+<Storage name="Default">
+<Type>%Library.CacheStorage</Type>
+<DataLocation>^LinFOOD.ProdutoD</DataLocation>
+<DefaultData>ProdutoDefaultData</DefaultData>
+<IdLocation>^LinFOOD.ProdutoD</IdLocation>
+<IndexLocation>^LinFOOD.ProdutoI</IndexLocation>
+<StreamLocation>^LinFOOD.ProdutoS</StreamLocation>
+<Data name="ProdutoDefaultData">
+<Value name="1">
+<Value>%%CLASSNAME</Value>
+</Value>
+<Value name="2">
+<Value>Classe</Value>
+</Value>
+<Value name="3">
+<Value>CodProduto</Value>
+</Value>
+<Value name="4">
+<Value>Descricao</Value>
+</Value>
+<Value name="5">
+<Value>Preco</Value>
+</Value>
+</Data>
+</Storage>
+</Class>
+<Class name="LinFOOD.RelatorioProdutos">
+<Description>
+Esta classe gera o relatório de produtos mais vendidos</Description>
+<Language>basic</Language>
+<ProcedureBlock>1</ProcedureBlock>
+<Super>%RegisteredObject</Super>
+<TimeChanged>59472,58631.765</TimeChanged>
+
+<Property name="Quantidade">
+<Description>
+Define a Quantidade de um produto</Description>
+<Type>%Float</Type>
+</Property>
+
+<Property name="Descricao">
+<Description>
+Descrição do Produto</Description>
+<Type>%String</Type>
+</Property>
+
+<Property name="Lista">
+<Description>
+Lista de Itens do Relatório</Description>
+<Type>RelatorioProdutos</Type>
+<Collection>list</Collection>
+<Private>1</Private>
+<Transient>1</Transient>
+</Property>
+
+<Method name="AdicionaItem">
+<Description>
+Adiciona um item a lista</Description>
+<FormalSpec>AQtd:%Float,ADesc:%String</FormalSpec>
+<Private>1</Private>
+<Implementation><![CDATA[
+	'verifica se já existe item na lista
+	For i = 1 To Me.Lista.Count()
+	  rel = Me.Lista.GetAt(i)
+	  'se já existe adiciona qtd
+	  If rel.Descricao = ADesc Then
+	    rel.Quantidade = rel.Quantidade + AQtd
+	    Return
+	  End If
+	Next i
+	'adiciona novo item na lista
+	rel = New RelatorioProdutos
+	rel.Descricao = ADesc
+	rel.Quantidade = AQtd
+	Me.Lista.Insert(rel)
+
+]]></Implementation>
+</Method>
+
+<Method name="EmitirRelatorio">
+<Description><![CDATA[
+Gera o relatório de Produtos mais vendidos por Período<br>
+AInicio, AFim delimitam o período (formato mm/dd/aaaa)]]></Description>
+<FormalSpec>AInicio,AFim:%String</FormalSpec>
+<ReturnType>%ListOfObjects</ReturnType>
+<Implementation><![CDATA[
+  'lista o histórico
+  hist = New MesaHistorico
+  histlista = hist.Listar("SELECT * FROM LinFOOD.MesaHistorico WHERE SUBSTRING(DataHora,1,10) >= '" & Left(AInicio,10) & "' AND SUBSTRING(DataHora,1,10) <= '" & Left(AFim,10) & "' ORDER BY DataHora")
+  'pega todos os itens do histórico
+  For i = 1 to histlista.Count()
+    mesahist = histlista.GetAt(i)
+    itens = mesahist.Itens
+    For j = 1 to itens.Count()
+      item = itens.GetAt(j)
+      'adiciona a lista
+      Me.AdicionaItem(item.Quantidade,item.Descricao)
+    Next j
+  Next i
+  'Ordena Lista por Quantidade
+  For j = Me.Lista.Count() - 1 to 1 step -1
+    For i = 1 to j 
+      If Me.Lista.GetAt(i).Quantidade < Me.Lista.GetAt(i + 1).Quantidade Then
+        temp = Me.Lista.GetAt(i)
+        Me.Lista.SetAt(Me.Lista.GetAt(i + 1),i)
+        Me.Lista.SetAt(temp,i + 1)
+      End If
+    Next i
+  Next j
+  Return Me.Lista
+
+]]></Implementation>
+</Method>
+</Class>
+<Class name="LinFOOD.RelatorioVendas">
+<Description>
+Esta classe gera o Relatório de Vendas por Período</Description>
+<Language>basic</Language>
+<ProcedureBlock>1</ProcedureBlock>
+<Super>%RegisteredObject</Super>
+<TimeChanged>59472,58558.171</TimeChanged>
+
+<Property name="Data">
+<Description>
+Define uma Data mm/dd/aaaa</Description>
+<Type>%String</Type>
+</Property>
+
+<Property name="Venda">
+<Description>
+Valor das Vendas</Description>
+<Type>%Currency</Type>
+</Property>
+
+<Property name="TxServico">
+<Description>
+Valor cobrado de Taxa de Serviço</Description>
+<Type>%Currency</Type>
+</Property>
+
+<Property name="Desconto">
+<Description>
+Valor do Desconto</Description>
+<Type>%Currency</Type>
+</Property>
+
+<Property name="Total">
+<Description>
+Total (Venda + TxServico - Desconto)</Description>
+<Type>%Currency</Type>
+</Property>
+
+<Method name="EmitirRelatorio">
+<Description><![CDATA[
+Gera o relatório de Vendas por Período<br>
+AInicio, AFim delimitam o período (formato mm/dd/aaaa)]]></Description>
+<FormalSpec>AInicio,AFim:%String</FormalSpec>
+<ReturnType>%ListOfObjects</ReturnType>
+<Implementation><![CDATA[
+    lista = New %ListOfObjects
+	lista.ElementType = "LinFOOD.RelatorioVendas"
+	'Define o tipo de Query
+    sql = "%DynamicQuery:SQL"
+    asql = "SELECT SUBSTRING(DataHora,1,10) Data, SUM(Desconto) Desconto, SUM(Subtotal) Venda, SUM(TxServico * Subtotal) TxServico, SUM(TxServico * Subtotal + Subtotal - Desconto) Total FROM LinFOOD.MesaHistorico WHERE SUBSTRING(DataHora,1,10) >= '" & Left(AInicio,10) & "' AND SUBSTRING(DataHora,1,10) <= '" & Left(AFim,10) & "' GROUP BY SUBSTRING(DataHora,1,10) ORDER BY Data"
+    'Cria um novo ResultSet
+    ext = New %ResultSet(sql)
+    'Executa a query
+    ext.Prepare(asql)
+    ext.Execute()
+	'Guarda os objetos na lista
+	While (ext.Next())
+	   rel = New RelatorioVendas
+	   rel.Data =  ext.GetData(1)
+	   rel.Desconto = ext.GetData(2)
+	   rel.Venda = ext.GetData(3)
+	   rel.TxServico = ext.GetData(4)
+	   rel.Total = ext.GetData(5)
+	   lista.Insert(rel)
+	Wend
+    Return lista
+
+]]></Implementation>
+</Method>
+</Class>
+<Class name="LinFOOD.Usuario">
+<Description>
+Esta classe armazena o cadastro de usuários do sistema</Description>
+<ClassType>persistent</ClassType>
+<ProcedureBlock>1</ProcedureBlock>
+<Super>%Persistent</Super>
+<TimeChanged>59414,46979.078</TimeChanged>
+<TimeCreated>59414,38106.796</TimeCreated>
+
+<Property name="Nome">
+<Description>
+Define o nome do usuário</Description>
+<Type>%String</Type>
+<Required>1</Required>
+</Property>
+
+<Property name="Senha">
+<Description>
+Define a senha do usuário</Description>
+<Type>%String</Type>
+<Required>1</Required>
+</Property>
+
+<Property name="TipoAcesso">
+<Description><![CDATA[
+Define o tipo de acesso<br>
+"GERENTE", "OPERADOR", "GARCOM"]]></Description>
+<Type>%String</Type>
+<Required>1</Required>
+</Property>
+
+<Property name="Logado">
+<Description>
+Retorna True se usuário está logado no sistema</Description>
+<Type>%Boolean</Type>
+</Property>
+
+<Index name="NomeIndex">
+<Description>
+Índice para agilizar pesquisas no banco</Description>
+<Properties>Nome</Properties>
+<Unique>1</Unique>
+</Index>
+
+<Property name="Id">
+<Description>
+Retorna o Id do objeto instanciado</Description>
+<Type>%Integer</Type>
+<Calculated>1</Calculated>
+<Transient>1</Transient>
+<ReadOnly>1</ReadOnly>
+</Property>
+
+<Method name="IdGet">
+<Description>
+Implementação da propriedade Id</Description>
+<Language>basic</Language>
+<ReturnType>%Integer</ReturnType>
+<Implementation><![CDATA[
+ return Me.%Id()
+
+]]></Implementation>
+</Method>
+
+<Method name="Listar">
+<Description><![CDATA[
+Retorna os objetos armazenados através de uma lista.<br>
+O parâmetro define a Query a ser executada (default = "" = todos objetos).<p>
+Para obter os objetos use os métodos GetAt(i) e Count() da Lista de objetos.]]></Description>
+<FormalSpec>ASQL:%String=""</FormalSpec>
+<Language>basic</Language>
+<ReturnType>%ListOfObjects</ReturnType>
+<Implementation><![CDATA[
+	'Define o tipo de Query
+    If ASQL = "" Then
+      sql = "LinFOOD.Usuario:Extent"
+    Else
+      sql = "%DynamicQuery:SQL"
+    End If  
+    'Cria um novo ResultSet
+    ext = New %ResultSet(sql)
+    'Executa a query
+    If ASQL <> "" Then
+      ext.Prepare(ASQL)
+    End If  
+    ext.Execute()
+    'Cria a lista de objetos
+	listobj = New %ListOfObjects
+	'Informa o tipo de objetos para armazenar na lista
+	listobj.ElementType = "LinFOOD.Usuario"
+	'Guarda os objetos na lista
+	While (ext.Next())
+	   sc = listobj.InsertObjectId(ext.GetData(1))
+	Wend
+	'Retorna a lista de objetos
+	Return listobj
+
+]]></Implementation>
+</Method>
+
+<Method name="Inserir">
+<Description>
+Insere um novo usuário ao cadastro. Retorna o objeto criado</Description>
+<FormalSpec>ANome:%String,ASenha:%String,ATipoAcesso:%String=""</FormalSpec>
+<Language>basic</Language>
+<ReturnType>Usuario</ReturnType>
+<Implementation><![CDATA[
+	obj = New Usuario
+	obj.Nome = UCase(ANome)
+	obj.Senha = ASenha
+	If (UCase(ATipoAcesso) <> "GERENTE") And (UCase(ATipoAcesso) <> "OPERADOR") And (UCase(ATipoAcesso) <> "GARCOM") Then
+  	  obj.TipoAcesso = "GERENTE"
+	Else
+      obj.TipoAcesso = UCase(ATipoAcesso)
+	End If  
+	Dim sc As %Integer
+	sc = obj.%Save()
+	If sc = 1 Then
+	  Return obj
+	Else
+	  Return ""
+	End If
+
+]]></Implementation>
+</Method>
+
+<Method name="Consultar">
+<Description>
+Retorna um usuário (objeto) pelo Id</Description>
+<FormalSpec>Aid:%Integer</FormalSpec>
+<Language>basic</Language>
+<ReturnType>Usuario</ReturnType>
+<Implementation><![CDATA[
+	obj = OpenId Usuario(Aid)
+	Return obj
+
+]]></Implementation>
+</Method>
+
+<Method name="Alterar">
+<Description>
+Altera um usuário. Retorna o objeto alterado</Description>
+<FormalSpec>Aid:%Integer,ANome:%String,ASenha:%String,ATipoAcesso:%String=""</FormalSpec>
+<Language>basic</Language>
+<ReturnType>Usuario</ReturnType>
+<Implementation><![CDATA[
+	obj = OpenId Usuario(Aid)
+	obj.Nome = UCase(ANome)
+	obj.Senha = ASenha
+	If (UCase(ATipoAcesso) <> "GERENTE") And (UCase(ATipoAcesso) <> "OPERADOR") And (UCase(ATipoAcesso) <> "GARCOM") Then
+  	  obj.TipoAcesso = "GERENTE"
+	Else
+      obj.TipoAcesso = UCase(ATipoAcesso)
+	End If  
+	Dim sc As %Integer
+	sc = obj.%Save()
+	If sc = 1 Then
+	  Return obj
+	Else
+	  Return ""
+	End If
+
+]]></Implementation>
+</Method>
+
+<Method name="Excluir">
+<Description>
+Exclui um usuário. Retorna True se foi bem sucedido</Description>
+<FormalSpec>Aid:%Integer</FormalSpec>
+<Language>basic</Language>
+<ReturnType>%Boolean</ReturnType>
+<Implementation><![CDATA[
+	obj = OpenId Usuario(Aid)
+	'verifica qtos gerentes tem
+	lista = Me.Listar()
+	ger = 0
+	For i = 1 to lista.Count()
+	  If lista.GetAt(i).TipoAcesso = "GERENTE" Then
+	    ger = ger + 1
+	  End If
+    Next i   
+    lista = Nothing
+    'se é o último gerente, não exclui
+    If (ger = 1) And (obj.TipoAcesso = "GERENTE") Then
+      Return False
+    End If
+	Dim sc As %Integer
+	sc = obj.%DeleteId(Aid)
+	If sc = 1 Then
+	 Return True
+	Else
+	 Return False
+	End If
+
+]]></Implementation>
+</Method>
+
+<Method name="EfetuarLogin">
+<Description>
+Efetua Login do Usuário. Retorna o objeto (usuário) logado se foi bem sucedido</Description>
+<FormalSpec>ANome:%String,ASenha:%String</FormalSpec>
+<Language>basic</Language>
+<ReturnType>Usuario</ReturnType>
+<Implementation><![CDATA[
+	lista = Me.Listar()
+	usulog = Nothing
+	If lista.Count() = 0 Then
+	  usulog = Me.Inserir(ANome,ASenha,"")
+	  lista = Me.Listar() 
+	End If
+	For i = 1 To lista.Count()
+	  usu = lista.GetAt(i)
+	  If (UCase(usu.Nome) = UCase(ANome)) And (usu.Senha = ASenha) Then
+	    usu.Logado = True 
+	    usulog = usu
+	  Else
+	    usu.Logado = False
+	  End If
+      Dim sc As %Integer
+	  sc = usu.%Save()
+	Next i
+	Return usulog
+
+]]></Implementation>
+</Method>
+
+<Method name="RetornarLogin">
+<Description>
+Retorna o usuário logado ou Nothing se não houver ninguém logado</Description>
+<Language>basic</Language>
+<ReturnType>Usuario</ReturnType>
+<Implementation><![CDATA[
+	lista = Me.Listar()
+	usulog = Nothing
+	For i = 1 To lista.Count()
+	  usu = lista.GetAt(i)
+	  If usu.Logado Then
+	    usulog = usu
+	    Exit For
+	  End If
+	Next i
+	Return usulog
+
+]]></Implementation>
+</Method>
+
+<Method name="EfetuarLogoff">
+<Description>
+Efetua o Logoff de todos usuários</Description>
+<Language>basic</Language>
+<Implementation><![CDATA[
+	lista = Me.Listar()
+	For i = 1 To lista.Count()
+	  usu = lista.GetAt(i)
+      usu.Logado = False 
+      Dim sc As %Integer
+	  sc = usu.%Save()
+	Next i
+
+]]></Implementation>
+</Method>
+
+<Storage name="Default">
+<Type>%Library.CacheStorage</Type>
+<DataLocation>^LinFOOD.UsuarioD</DataLocation>
+<DefaultData>UsuarioDefaultData</DefaultData>
+<IdLocation>^LinFOOD.UsuarioD</IdLocation>
+<IndexLocation>^LinFOOD.UsuarioI</IndexLocation>
+<StreamLocation>^LinFOOD.UsuarioS</StreamLocation>
+<Data name="UsuarioDefaultData">
+<Value name="1">
+<Value>%%CLASSNAME</Value>
+</Value>
+<Value name="2">
+<Value>Nome</Value>
+</Value>
+<Value name="3">
+<Value>Senha</Value>
+</Value>
+<Value name="4">
+<Value>TipoAcesso</Value>
+</Value>
+<Value name="5">
+<Value>Logado</Value>
+</Value>
+</Data>
+</Storage>
+</Class>
+<Project name="linfood" LastModified="2003-10-30 16:17:32">
+  <Items>
+    <ProjectItem name="LinFOOD.Classe" type="CLS"/>
+    <ProjectItem name="LinFOOD.Configuracao" type="CLS"/>
+    <ProjectItem name="LinFOOD.Item" type="CLS"/>
+    <ProjectItem name="LinFOOD.ItemHistorico" type="CLS"/>
+    <ProjectItem name="LinFOOD.Mesa" type="CLS"/>
+    <ProjectItem name="LinFOOD.MesaHistorico" type="CLS"/>
+    <ProjectItem name="LinFOOD.Observacao" type="CLS"/>
+    <ProjectItem name="LinFOOD.Produto" type="CLS"/>
+    <ProjectItem name="LinFOOD.RelatorioProdutos" type="CLS"/>
+    <ProjectItem name="LinFOOD.RelatorioVendas" type="CLS"/>
+    <ProjectItem name="LinFOOD.Usuario" type="CLS"/>
+  </Items>
+</Project>
+<Checksum value="3111789837"/>
+</Export>

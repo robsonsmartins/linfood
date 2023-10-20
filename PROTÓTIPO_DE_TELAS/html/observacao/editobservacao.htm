@@ -1,0 +1,129 @@
+
+<script language="JavaScript">
+function enviar()
+{
+  if (document.formobservacao.descricao.value == "")
+  {
+    window.alert("O campo Descrição não pode estar em branco!");
+    document.formobservacao.descricao.focus();
+    return;
+  }
+  else
+  {
+    document.location.href("observacao.htm");
+  }
+}
+
+</script>
+
+<head>
+<title>Sistema LinFOOD - Cadastro de Observações</title>
+<style type="text/css"><!--
+table {font-size: 10.7px; color: black; font-family: Arial, Helvetica, sans-serif; text-decoration: none; }
+soldig {font-size: 10.7px; color: black; font-family: Arial, Helvetica, sans-serif; text-decoration: none; }
+body { color: black; font-size=12px; font-family: Arial; } 
+  a:link { color: blue; } 
+  a:hover {  color: blue;} 
+  a:visited { color: blue;}
+-->
+</style>
+<style type="text/css"><!--
+table {font-size: 10.7px; color: black; font-family: Arial, Helvetica, sans-serif; text-decoration: none; }
+soldig {font-size: 10.7px; color: black; font-family: Arial, Helvetica, sans-serif; text-decoration: none; }
+-->
+</style>
+</head>
+
+<body topmargin="0" background="../imagens/backgrnd.gif">
+
+<font face="Arial" size="2">
+<div align="center">
+  <center>
+  <table border="0" cellspacing="0" width="100%" cellpadding="0">
+    <tr>
+      <td width="16%" bgcolor="#008000"><img border="0" src="../imagens/logo.gif" width="57" height="51"></td>
+    </font>
+      <td width="37%" bgcolor="#008000"><b><font face="Arial" size="5" color="#FFFFFF">Sistema LinFOOD</font></b></td>
+      <td width="47%" bgcolor="#008000">
+        <p align="center"><b><font face="Arial" size="3" color="#C0C0C0">Observações</font></b></p>
+    </td>
+    </tr>
+    <tr>
+      <td width="100%" colspan="3">
+        <div align="center">
+          <table border="0" cellpadding="2" cellspacing="0" width="100%" bgcolor="#DADADA">
+            <tr>
+              <td width="2%">
+                <p align="center"><a href="../admlogin.htm"><img border="0" src="../imagens/logoff.gif" alt="Efetuar Logoff" width="25" height="25"></a></p>
+              </td>
+  </center>
+              <td width="1%"><a href="../admmenu.htm"><img border="0" src="../imagens/voltar.gif" alt="Voltar ao Menu Principal" width="25" height="25"></a></td>
+              <td width="96%">
+                <p align="right">&nbsp;<font color="#000000"><b>Usuário: </b> </font> Nome do Usuário</p>
+            </td>
+            </tr>
+          </table>
+        </div>
+
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+
+<form method="GET" action="operacaoobservacao.asp" name="formobservacao">
+<div align="center">
+  <center>
+  <table border="0" cellpadding="4" cellspacing="0" width="350">
+    <tr>
+      <td width="100%" colspan="2" bgcolor="#000080">
+        <p align="center"><b><font color="#FFFFFF" size="2">&nbsp;Observação</font></b></p>
+      </td>
+    </tr>
+    <tr>
+      <td width="14%" bgcolor="#C0C0C0"><b><font face="Arial" size="3">Descrição</font></b></td>
+      <td width="86%" bgcolor="#C0C0C0">
+        <input type="text" name="descricao" size="40" value="Descrição da observação">
+        <input type="hidden" name="id" size="20" value="1"></td>
+    </tr>
+    <tr>
+      <td width="100%" colspan="2" bgcolor="#C0C0C0">
+        <p align="center">&nbsp;<input type="button" value="  Salvar  " name="btnSalvar" onclick="javascript:enviar()">&nbsp;
+        <input type="button" value="Cancelar" name="btnCancelar" onClick="javascript:document.location.href('observacao.htm')"></p>
+      </td>
+    </tr>
+  </table>
+  </center>
+</div>
+&nbsp;
+</form>
+
+<script language="JavaScript">document.formobservacao.descricao.focus();</script>
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+
+
+</table>
+</div>
+
+<div align="center">
+  <center>
+  <table border="0" cellpadding="0" cellspacing="0" width="100%">
+    <tr>
+      <td width="100%">
+<b>
+Grupo Ômega</b></td>
+    </tr>
+    <tr>
+      <td width="100%">
+Faculdades Batista de Administração e Informática</td>
+    </tr>
+    <tr>
+      <td width="100%">
+Sistemas de Informação - 8° Semestre - 2003</td>
+    </tr>
+  </table>
+  </center>
+</div>
+
