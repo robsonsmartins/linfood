@@ -1,0 +1,176 @@
+<script language="JavaScript">
+function validaNumero(inteiro,texto) 
+//inteiro = true -> número inteiro, false -> real
+//texto = texto a ser validado
+{
+  strNumero = true;
+  for (i = 0; i < texto.length; i++)
+  {
+    s = texto.substr(i,1); 
+    naonumero = ((s != "0") && (s != "1") && (s != "2") && (s != "3") && 
+                 (s != "4") && (s != "5") && (s != "6") && (s != "7") && 
+                 (s != "8") && (s != "9"));
+    naovirgula = (s != ",");
+    if (naonumero && inteiro || naonumero && !inteiro && naovirgula)
+    {
+      strNumero = false;
+      break;   
+    }
+  }
+  return(strNumero);
+}
+
+function validaData(texto) 
+{
+  if ((texto.length != 10) ||   
+     (!validaNumero(true,texto.substr(0,2))) || (!validaNumero(true,texto.substr(3,2))) ||
+     (!validaNumero(true,texto.substr(6,4))) || (texto.substr(2,1) != "/") || (texto.substr(5,1) != "/"))
+  {
+    return(false);
+  }
+  dia = parseInt(texto.substr(0,2),10);
+  mes = parseInt(texto.substr(3,2),10);
+  ano = parseInt(texto.substr(6,4),10);
+  if ((mes > 12) || (mes < 1) || (dia < 1) || ((mes == 1) && (dia > 31)) || ((mes == 3) && (dia > 31)) ||
+     ((mes == 4) && (dia > 30)) || ((mes == 5) && (dia > 31)) || ((mes == 6) && (dia > 30)) || ((mes == 7) && (dia > 31)) ||
+     ((mes == 8) && (dia > 31)) || ((mes == 9) && (dia > 30)) || ((mes == 10) && (dia > 31)) || ((mes == 11) && (dia > 30)) ||
+     ((mes == 12) && (dia > 31)) || ((mes == 2) && (dia > 29) && ((ano % 4) == 0)) || ((mes == 2) && (dia > 28) && ((ano % 4) != 0)))
+  {
+    return(false);
+  }
+  return(true);
+}
+
+
+function enviar()
+{
+  inicio = document.formrel.inicio.value;
+  fim = document.formrel.fim.value;
+  if (inicio == "" || !validaData(inicio))
+  {
+    window.alert("O campo Início deve ser preenchido com uma data válida no formato dd/mm/aaaa!");
+    document.formrel.inicio.focus();
+    return;
+  }
+  else if (fim == "" || !validaData(fim))
+  {
+    window.alert("O campo Fim deve ser preenchido com uma data válida no formato dd/mm/aaaa!");
+    document.formrel.fim.focus();
+    return;
+  }
+  else
+  {
+    document.location.href("relvendas.htm");
+  }
+}
+</script>
+
+
+<head>
+<title>Sistema LinFOOD - Relatório de Vendas por Período</title>
+<style type="text/css"><!--
+table {font-size: 10.7px; color: black; font-family: Arial, Helvetica, sans-serif; text-decoration: none; }
+soldig {font-size: 10.7px; color: black; font-family: Arial, Helvetica, sans-serif; text-decoration: none; }
+body { color: black; font-size=12px; font-family: Arial; } 
+  a:link { color: blue; } 
+  a:hover {  color: blue;} 
+  a:visited { color: blue;}
+-->
+</style>
+<style type="text/css"><!--
+table {font-size: 10.7px; color: black; font-family: Arial, Helvetica, sans-serif; text-decoration: none; }
+soldig {font-size: 10.7px; color: black; font-family: Arial, Helvetica, sans-serif; text-decoration: none; }
+-->
+</style>
+</head>
+
+<body topmargin="0" background="../imagens/backgrnd.gif">
+
+<font face="Arial" size="2">
+<div align="center">
+  <center>
+  <table border="0" cellspacing="0" width="100%" cellpadding="0">
+    <tr>
+      <td width="16%" bgcolor="#008000"><img border="0" src="../imagens/logo.gif" width="57" height="51"></td>
+    </font>
+      <td width="37%" bgcolor="#008000"><b><font face="Arial" size="5" color="#FFFFFF">Sistema LinFOOD</font></b></td>
+      <td width="47%" bgcolor="#008000">
+        <p align="center"><b><font face="Arial" size="3" color="#C0C0C0">Vendas por Período</font></b></p>
+    </td>
+    </tr>
+    <tr>
+      <td width="100%" colspan="3">
+        <div align="center">
+          <table border="0" cellpadding="2" cellspacing="0" width="100%" bgcolor="#DADADA">
+            <tr>
+              <td width="2%">
+                <p align="center"><a href="../admlogin.htm"><img border="0" src="../imagens/logoff.gif" alt="Efetuar Logoff" width="25" height="25"></a></p>
+              </td>
+  </center>
+              <td width="1%"><a href="../admmenu.htm"><img border="0" src="../imagens/voltar.gif" alt="Voltar ao Menu Principal" width="25" height="25"></a></td>
+              <td width="96%">
+                <p align="right">&nbsp;<font color="#000000"><b>Usuário: </b> </font>Nome do Usuário</p>
+            </td>
+            </tr>
+          </table>
+        </div>
+
+</td>
+    </tr>
+  </table>
+  </div>
+  <p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+<form method="GET" action="relvendas.asp" name="formrel">
+  <div align="center">
+    <center>
+    <table border="0" cellspacing="0" width="530" cellpadding="4" height="89">
+      <tr>
+        <td width="520" colspan="2" bgcolor="#000080" height="18">
+          <p align="center"><font color="#FFFFFF" size="2" face="Arial"><b>Vendas
+          por Período</b></font></td>
+      </tr>
+      <tr>
+        <td width="253" bgcolor="#C0C0C0" height="20"><b><font size="2" face="Arial">Início: <input type="text" name="inicio" size="15">
+          </font><font face="Arial" size="1">(dd/mm/aaaa)</font></b></td>
+        <td width="257" bgcolor="#C0C0C0" height="20"><b><font size="2" face="Arial">Fim: <input type="text" name="fim" size="15"> 
+          </font><font face="Arial" size="1">(dd/mm/aaaa)</font></b></td>
+      </tr>
+      <tr>
+        <td width="520" colspan="2" bgcolor="#C0C0C0" height="27">
+          <p align="center"><input type="button" value="Emitir Relatório" name="btnEnviar" onclick="javascript:enviar();"></td>
+      </tr>
+    </table>
+    </center>
+  </div>
+</form>
+
+<script language="JavaScript">document.formrel.inicio.focus();</script>
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+
+
+<div align="center">
+  <center>
+  <table border="0" cellpadding="0" cellspacing="0" width="100%">
+    <tr>
+      <td width="100%">
+<b>
+Grupo Ômega</b></td>
+    </tr>
+    <tr>
+      <td width="100%">
+Faculdades Batista de Administração e Informática</td>
+    </tr>
+    <tr>
+      <td width="100%">
+Sistemas de Informação - 8° Semestre - 2003</td>
+    </tr>
+  </table>
+  </center>
+</div>
