@@ -47,7 +47,7 @@ function confirmaApagar(id, descricao)
       <td width="65" bgcolor="#C0C0C0"><b><font size="2" face="Arial">Código</font></b></td>
       <td width="253" bgcolor="#C0C0C0"><b><font size="2" face="Arial">Descrição</font></b></td>
       <td width="75" bgcolor="#C0C0C0"><b><font size="2" face="Arial">Preço</font></b></td>
-      <td width="128" bgcolor="#C0C0C0"><b><font size="2" face="Arial">Classe</font></b></td>
+      <td width="128" bgcolor="#C0C0C0"><b><font size="2" face="Arial">Categoria</font></b></td>
       <td width="55" bgcolor="#C0C0C0">
         <p align="center"><b><font size="2" face="Arial">Excluir</font></b></p>
       </td>

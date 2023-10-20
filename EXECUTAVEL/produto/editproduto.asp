@@ -126,7 +126,7 @@ function enviar()
       </td>
     </tr>
     <tr>
-      <td width="62" bgcolor="#C0C0C0"><b><font size="2" face="Arial">Classe</font></b></td>
+      <td width="62" bgcolor="#C0C0C0"><b><font size="2" face="Arial">Categoria</font></b></td>
       <td width="238" bgcolor="#C0C0C0">
         <select size="1" name="classe">
           <option 
@@ -135,7 +135,7 @@ function enviar()
                     Response.write("selected") 
                   End If 
                 %>
-          value="0">Escolha uma Classe de Produtos</option>
+          value="0">Escolha uma Categoria de Produtos</option>
           <%
             For i = 1 To lista.Count()
               Set classe = lista.GetAt(i)

@@ -44,8 +44,8 @@ body { color: black; font-size=12px; font-family: Arial; }
               <td width="0%"><a href="produto/produto.asp"><img border="0" src="imagens/produto.gif" alt="Cadastro de Produtos" width="25" height="25"></a></td>
               <td width="0%"><a href="observacao/observacao.asp"><img border="0" src="imagens/observacao.gif" alt="Cadastro de Observações" width="25" height="25"></a></td>
               <td width="0%"><a href="configuracao/configuracao.asp"><img border="0" src="imagens/configuracao.gif" alt="Configuração do Sistema" width="25" height="25"></a></td>
-              <td width="0%"><a href="relatorio/relvendasform.asp"><img border="0" src="imagens/relatorio.gif" alt="Relatório de Vendas por Período" width="25" height="25"></a></td>
-              <td width="0%"><a href="relatorio/relprodutosform.asp"><img border="0" src="imagens/relatorio.gif" alt="Relatório de Produtos Mais Vendidos por Período" width="25" height="25"></a></td>
+              <td width="0%"><a href="relatorio/relvendasform.asp"><img border="0" src="imagens/relatoriov.gif" alt="Relatório de Vendas por Período" width="25" height="25"></a></td>
+              <td width="0%"><a href="relatorio/relprodutosform.asp"><img border="0" src="imagens/relatoriop.gif" alt="Relatório de Produtos Mais Vendidos por Período" width="25" height="25"></a></td>
               <td width="96%">
                 <p align="right">&nbsp;<font color="#000000"><b>Usuário: </b> </font> <%=usuario.Nome%></p>
             </td>
