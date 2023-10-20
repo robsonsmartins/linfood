@@ -39,11 +39,11 @@
         do Sistema</b></font></a></td>
     </tr>
     <tr>
-      <td width="42" bgcolor="#C0C0C0" align="center">&nbsp;<a href="relatorio/relvendasform.asp"><img border="0" src="imagens/relatorio.gif"></a></td>
+      <td width="42" bgcolor="#C0C0C0" align="center">&nbsp;<a href="relatorio/relvendasform.asp"><img border="0" src="imagens/relatoriov.gif"></a></td>
       <td width="384" bgcolor="#C0C0C0"><a href="relatorio/relvendasform.asp"><font face="Arial" size="3" color="#000000"><b>Relatório de Vendas por Período</b></font></a></td>
     </tr>
     <tr>
-      <td width="42" bgcolor="#C0C0C0" align="center">&nbsp;<a href="relatorio/relprodutosform.asp"><img border="0" src="imagens/relatorio.gif"></a></td>
+      <td width="42" bgcolor="#C0C0C0" align="center">&nbsp;<a href="relatorio/relprodutosform.asp"><img border="0" src="imagens/relatoriop.gif"></a></td>
       <td width="384" bgcolor="#C0C0C0"><a href="relatorio/relprodutosform.asp"><font face="Arial" size="3" color="#000000"><b>Relatório de Produtos Mais Vendidos por Período</b></font></a></td>
     </tr>
   </table>
